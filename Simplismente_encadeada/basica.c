@@ -1,15 +1,84 @@
 #include <stdio.h>
 #include <stdlib.h>
-// Estrutura básica do nó
+
 typedef struct Node {
- int data; // Armazena o valor (dado) do nó
- struct Node* next; // Ponteiro para o próximo nó da lista
+ int data; 
+ struct Node* next; 
 } Node;
-//Inserção no início da lista
+
 void inserirInicio(Node** head, int valor) {
-Node* novo = (Node*)malloc(sizeof(Node)); // Aloca memória para um novo nó
- novo->data = valor; // Define o valor do novo nó
- novo->next = *head; // Faz o novo nó apontar para o antigo primeiro nó
- *head = novo; // Atualiza o ponteiro da cabeça (head) para o novo nó
+Node* novo = (Node*)malloc(sizeof(Node)); 
+ novo->data = valor; 
+ novo->next = *head; 
+ *head = novo; 
 }
 
+void inserirFim(Node** head, int valor) {
+ Node* novo = (Node*)malloc(sizeof(Node)); 
+ novo->data = valor; 
+ novo->next = NULL; 
+ 
+ if (*head == NULL) {
+ *head = novo;
+ return;
+ }
+ Node* temp = *head; 
+ while (temp->next != NULL) 
+ temp = temp->next;
+ temp->next = novo; 
+}
+
+void removerValor(Node** head, int valor) {
+ Node* temp = *head; 
+ Node* anterior = NULL; 
+
+ while (temp != NULL && temp->data != valor) {
+ anterior = temp; 
+ temp = temp->next; 
+ }
+ if (temp == NULL) return; 
+
+ if (anterior == NULL)
+ *head = temp->next; 
+ else
+ anterior->next = temp->next; 
+
+ free(temp); 
+}
+
+Node* buscar(Node* head, int valor) {
+ Node* temp = head; 
+ while (temp != NULL) { 
+ if (temp->data == valor) 
+
+ return temp;
+ temp = temp->next; 
+ }
+ return NULL; 
+}
+
+void imprimir(Node* head) {
+ Node* temp = head; 
+ while (temp != NULL) { 
+ printf("%d -> ", temp->data); 
+ temp = temp->next; 
+ }
+ printf("NULL\n");
+}
+
+
+int main() {
+ Node* head = NULL; 
+ inserirInicio(&head, 10);
+ inserirInicio(&head, 20);
+ inserirFim(&head, 30);
+ imprimir(head);
+ removerValor(&head, 10);
+ imprimir(head); 
+ Node* achado = buscar(head, 30);
+ if (achado != NULL)
+ printf("Valor %d encontrado!\n", achado->data);
+ else
+ printf("Valor não encontrado.\n");
+ return 0;
+}
